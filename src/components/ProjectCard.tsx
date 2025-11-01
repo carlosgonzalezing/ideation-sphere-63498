@@ -15,17 +15,19 @@ interface ProjectCardProps {
     name: string;
     role: string;
     avatar: string;
+    isGroup?: boolean;
   };
   title: string;
   description: string;
   category: string;
-  type: "idea" | "proyecto" | "text";
+  type: "idea" | "proyecto" | "text" | "evento" | "equipo";
   likes: number;
   comments: number;
   timeAgo: string;
   teamMembers?: number;
   participants?: string[];
   image?: string;
+  groupName?: string;
 }
 
 export const ProjectCard = ({
@@ -40,6 +42,7 @@ export const ProjectCard = ({
   teamMembers = 0,
   participants = [],
   image,
+  groupName,
 }: ProjectCardProps) => {
   const [hasJoined, setHasJoined] = useState(false);
   const [localParticipants, setLocalParticipants] = useState(participants);
@@ -163,10 +166,15 @@ export const ProjectCard = ({
                 className={`text-xs font-medium px-3 py-1 whitespace-nowrap ${
                   type === "idea" 
                     ? "bg-gradient-to-r from-primary to-accent text-white border-0" 
+                    : type === "evento"
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0"
                     : "border-accent text-accent"
                 }`}
               >
-                {type === "idea" ? "💡 Idea" : "🚀 En progreso"}
+                {type === "idea" && "💡 Idea"}
+                {type === "proyecto" && "🚀 En progreso"}
+                {type === "evento" && "📅 Evento"}
+                {type === "equipo" && "👥 Equipo"}
               </Badge>
             )}
           </div>
@@ -255,11 +263,15 @@ export const ProjectCard = ({
                 </Dialog>
               )}
             </div>
-          ) : (
+          ) : type === "proyecto" || type === "equipo" ? (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="font-medium">👥 {teamMembers} miembros en el equipo</span>
             </div>
-          )}
+          ) : type === "evento" && groupName ? (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="font-medium">📍 Organizado por {groupName}</span>
+            </div>
+          ) : null}
         </div>
 
         <div className="flex items-center gap-1 mt-5 pt-4 border-t border-border">

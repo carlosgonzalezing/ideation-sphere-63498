@@ -5,14 +5,33 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { QuickActions } from "@/components/QuickActions";
 import { CreatePostPrompt } from "@/components/CreatePostPrompt";
 import { SuggestedUsers } from "@/components/SuggestedUsers";
+import { SuggestedGroups } from "@/components/SuggestedGroups";
 import { Card } from "@/components/ui/card";
 import { TrendingUp } from "lucide-react";
 
-type FilterType = "all" | "proyecto" | "equipo" | "idea" | "evento";
+type FilterType = "all" | "proyecto" | "equipo" | "idea" | "evento" | "text";
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const projects = [
+    {
+      author: {
+        name: "Emprendedores Tech UNAM",
+        role: "Grupo • 342 miembros",
+        avatar: "https://api.dicebear.com/7.x/shapes/svg?seed=tech",
+        isGroup: true,
+      },
+      title: "Meetup: Pitch Night este Viernes",
+      description:
+        "🎤 ¡Únete a nuestra noche de pitches! Estudiantes presentarán sus ideas de startup. Habrá networking, pizza y premios para las mejores presentaciones. Cupos limitados, regístrate en el link.",
+      category: "Evento",
+      type: "evento" as const,
+      likes: 156,
+      comments: 34,
+      timeAgo: "Hace 1 hora",
+      groupName: "Emprendedores Tech UNAM",
+      image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop",
+    },
     {
       author: {
         name: "Juan Pérez",
@@ -61,6 +80,25 @@ const Index = () => {
       timeAgo: "Hace 5 horas",
       teamMembers: 8,
       image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop",
+    },
+    {
+      author: {
+        name: "Sostenibilidad Campus",
+        role: "Grupo • 203 miembros",
+        avatar: "https://api.dicebear.com/7.x/shapes/svg?seed=sustain",
+        isGroup: true,
+      },
+      title: "Nueva iniciativa: Huertos Universitarios",
+      description:
+        "🌱 Estamos lanzando un proyecto para crear huertos comunitarios en el campus. Ya tenemos el apoyo de la facultad de Biología. Buscamos voluntarios y patrocinadores. ¡Ayúdanos a hacer más verde nuestra universidad!",
+      category: "Sustentabilidad",
+      type: "proyecto" as const,
+      likes: 92,
+      comments: 28,
+      timeAgo: "Hace 4 horas",
+      teamMembers: 15,
+      groupName: "Sostenibilidad Campus",
+      image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop",
     },
     {
       author: {
@@ -136,6 +174,8 @@ const Index = () => {
         </Card>
 
         <SuggestedUsers />
+        
+        <SuggestedGroups />
 
         {activeFilter !== "all" && (
           <div className="mb-4 mx-4 md:mx-0 flex items-center justify-between bg-primary/10 text-primary px-4 py-2 rounded-lg">

@@ -1,7 +1,7 @@
 import { Rocket, Users, Lightbulb, Calendar } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-type FilterType = "all" | "proyecto" | "equipo" | "idea" | "evento";
+type FilterType = "all" | "proyecto" | "equipo" | "idea" | "evento" | "text";
 
 interface QuickActionsProps {
   activeFilter: FilterType;
