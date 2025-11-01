@@ -151,47 +151,49 @@ const Index = () => {
     <div className="min-h-screen bg-background pb-20">
       <TopBar />
 
-      <main className="max-w-screen-xl mx-auto px-0 md:px-4 pt-4">
-        <QuickActions activeFilter={activeFilter} onFilterChange={setActiveFilter} />
-        
-        <CreatePostPrompt />
+      <main className="max-w-screen-xl mx-auto pt-4">
+        <div className="px-4 md:px-6">
+          <QuickActions activeFilter={activeFilter} onFilterChange={setActiveFilter} />
 
-        <Card className="mb-4 mx-4 md:mx-0 p-4 border-border" style={{ boxShadow: "var(--shadow-card)" }}>
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="h-5 w-5 text-primary" />
-            <h2 className="font-bold text-foreground">Tendencias</h2>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {trending.map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-medium hover:bg-primary/20 transition-colors cursor-pointer"
+          <CreatePostPrompt />
+
+          <Card className="mb-4 p-4 border-border">
+            <div className="flex items-center gap-2 mb-3">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <h2 className="font-semibold text-sm text-foreground">Tendencias</h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {trending.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-1 bg-muted text-foreground rounded text-xs font-medium hover:bg-muted/80 transition-colors cursor-pointer"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </Card>
+
+          <SuggestedUsers />
+
+          <SuggestedGroups />
+
+          {activeFilter !== "all" && (
+            <div className="mb-4 flex items-center justify-between bg-primary/10 text-primary px-4 py-2 rounded">
+              <p className="text-sm font-medium">
+                Mostrando {filteredProjects.length} {filteredProjects.length === 1 ? "resultado" : "resultados"}
+              </p>
+              <button
+                onClick={() => setActiveFilter("all")}
+                className="text-xs underline hover:no-underline"
               >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        </Card>
+                Ver todo
+              </button>
+            </div>
+          )}
+        </div>
 
-        <SuggestedUsers />
-        
-        <SuggestedGroups />
-
-        {activeFilter !== "all" && (
-          <div className="mb-4 mx-4 md:mx-0 flex items-center justify-between bg-primary/10 text-primary px-4 py-2 rounded-lg">
-            <p className="text-sm font-medium">
-              Mostrando {filteredProjects.length} {filteredProjects.length === 1 ? "resultado" : "resultados"}
-            </p>
-            <button 
-              onClick={() => setActiveFilter("all")}
-              className="text-xs underline hover:no-underline"
-            >
-              Ver todo
-            </button>
-          </div>
-        )}
-
-        <div className="space-y-4 px-4 md:px-0">
+        <div className="space-y-0 mt-4">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, index) => (
               <ProjectCard key={index} {...project} />

@@ -140,12 +140,12 @@ export const ProjectCard = ({
   ];
 
   return (
-    <Card className="overflow-hidden border-border bg-card transition-all duration-300 hover:shadow-[var(--shadow-hover)] hover:border-primary/20" style={{ boxShadow: "var(--shadow-card)" }}>
-      <div className="p-5">
+    <div className="bg-card border-b border-border transition-all duration-200 hover:bg-card/50">
+      <div className="px-4 py-5 max-w-screen-xl mx-auto">
         <div className="flex items-start gap-3 mb-5">
-          <Avatar className="h-12 w-12 ring-2 ring-primary/20 flex-shrink-0">
+          <Avatar className="h-11 w-11 ring-1 ring-border flex-shrink-0">
             <AvatarImage src={author.avatar} alt={author.name} />
-            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-accent/20 text-primary font-semibold">
+            <AvatarFallback className="bg-muted text-foreground font-semibold text-sm">
               {author.name.split(" ").map((n) => n[0]).join("")}
             </AvatarFallback>
           </Avatar>
@@ -157,17 +157,17 @@ export const ProjectCard = ({
             <p className="text-xs text-muted-foreground mt-0.5">{timeAgo}</p>
           </div>
           <div className="flex flex-col gap-2 items-end flex-shrink-0">
-            <Badge variant="secondary" className="text-xs font-medium px-3 py-1 whitespace-nowrap">
+            <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5 whitespace-nowrap rounded">
               {category}
             </Badge>
             {type !== "text" && (
-              <Badge 
-                variant={type === "idea" ? "default" : "outline"} 
-                className={`text-xs font-medium px-3 py-1 whitespace-nowrap ${
-                  type === "idea" 
-                    ? "bg-gradient-to-r from-primary to-accent text-white border-0" 
+              <Badge
+                variant={type === "idea" ? "default" : "outline"}
+                className={`text-xs font-medium px-2.5 py-0.5 whitespace-nowrap rounded ${
+                  type === "idea"
+                    ? "bg-primary text-white border-0"
                     : type === "evento"
-                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0"
+                    ? "bg-purple-600 text-white border-0"
                     : "border-accent text-accent"
                 }`}
               >
@@ -182,21 +182,21 @@ export const ProjectCard = ({
 
         <div className="space-y-4">
           <div>
-            <h2 className="font-bold text-xl text-foreground leading-tight mb-3">
+            <h2 className="font-bold text-lg text-foreground leading-tight mb-2">
               {title}
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-foreground/80 leading-relaxed">
               {description}
             </p>
           </div>
 
           {image && (
-            <div 
-              className="rounded-xl overflow-hidden border border-border cursor-pointer group"
+            <div
+              className="rounded overflow-hidden border border-border cursor-pointer group"
               onClick={() => setLightboxOpen(true)}
             >
-              <img 
-                src={image} 
+              <img
+                src={image}
                 alt={title}
                 className="w-full h-auto object-cover max-h-96 group-hover:scale-105 transition-transform duration-300"
               />
@@ -378,7 +378,7 @@ export const ProjectCard = ({
         onOpenChange={setShowReactionsDialog}
         reactions={mockReactions}
       />
-      
+
       {image && (
         <ImageLightbox
           src={image}
@@ -387,6 +387,6 @@ export const ProjectCard = ({
           onOpenChange={setLightboxOpen}
         />
       )}
-    </Card>
+    </div>
   );
 };

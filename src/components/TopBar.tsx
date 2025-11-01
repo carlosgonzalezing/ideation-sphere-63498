@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { MessageSquare, Menu, Settings, User, Bell, HelpCircle, LogOut, Shield, Palette, Globe, Users, Bookmark, Info, AlertCircle, Mail, Home } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MessageSquare, Menu, Settings, User, Bell, HelpCircle, LogOut, Shield, Palette, Globe, Users, Bookmark, Info, AlertCircle, Mail, Home, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link, useLocation } from "react-router-dom";
@@ -17,39 +17,58 @@ import { Separator } from "@/components/ui/separator";
 
 export const TopBar = () => {
   const [open, setOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const location = useLocation();
 
+  useEffect(() => {
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(isDark);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('darkMode', String(newMode));
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   return (
-    <header className="sticky top-0 bg-card/95 border-b border-border z-40 backdrop-blur-md shadow-sm">
-      <div className="flex items-center justify-between h-16 px-4 md:px-4 max-w-screen-xl mx-auto">
-        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-lg">UC</span>
+    <header className="sticky top-0 bg-card border-b border-border z-40">
+      <div className="flex items-center justify-between h-14 px-4 md:px-6 max-w-screen-xl mx-auto">
+        <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
+            <span className="text-white font-bold text-base">UC</span>
           </div>
           <div>
-            <h1 className="font-bold text-xl text-foreground tracking-tight">UniConnect</h1>
-            <p className="text-xs text-muted-foreground hidden sm:block">Conectando ideas universitarias</p>
+            <h1 className="font-bold text-base text-foreground">UniConnect</h1>
           </div>
         </Link>
         
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2">
           <Link to="/messages">
             <Button
               variant="ghost"
               size="icon"
-              className="hover:bg-primary/10 hover:text-primary transition-all duration-200 relative rounded-full"
+              className="hover:bg-muted transition-colors relative h-9 w-9"
             >
               <MessageSquare className="h-5 w-5" />
-              <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 bg-accent rounded-full border-2 border-card"></span>
+              <span className="absolute top-1 right-1 h-2 w-2 bg-accent rounded-full"></span>
             </Button>
           </Link>
-          
+
           <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-primary/10 hover:text-primary transition-all duration-200 rounded-full"
+                className="hover:bg-muted transition-colors h-9 w-9"
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -160,11 +179,15 @@ export const TopBar = () => {
                   </div>
                 </Button>
 
-                <Button variant="ghost" className="w-full justify-start h-auto py-4 px-4 hover:bg-primary/10">
-                  <Palette className="mr-3 h-5 w-5 text-primary" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start h-auto py-4 px-4 hover:bg-primary/10"
+                  onClick={toggleDarkMode}
+                >
+                  {darkMode ? <Sun className="mr-3 h-5 w-5 text-primary" /> : <Moon className="mr-3 h-5 w-5 text-primary" />}
                   <div className="flex flex-col items-start">
                     <span className="font-semibold text-base">Apariencia</span>
-                    <span className="text-xs text-muted-foreground">Tema claro/oscuro</span>
+                    <span className="text-xs text-muted-foreground">{darkMode ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}</span>
                   </div>
                 </Button>
 
@@ -228,9 +251,9 @@ export const TopBar = () => {
           </Drawer>
           
           <Link to="/profile/tech_innovator">
-            <Avatar className="h-9 w-9 ring-2 ring-primary/20 cursor-pointer hover:ring-primary/40 transition-all">
+            <Avatar className="h-8 w-8 cursor-pointer hover:opacity-80 transition-opacity">
               <AvatarImage src="/placeholder.svg" alt="User" />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-sm font-semibold">
+              <AvatarFallback className="bg-primary text-white text-xs font-semibold">
                 TU
               </AvatarFallback>
             </Avatar>
