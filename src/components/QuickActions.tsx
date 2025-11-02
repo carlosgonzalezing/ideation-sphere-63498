@@ -1,7 +1,7 @@
 import { Rocket, Users, Lightbulb, Calendar } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-type FilterType = "all" | "proyecto" | "equipo" | "idea" | "evento" | "text";
+type FilterType = "all" | "projects" | "teams" | "ideas" | "events";
 
 interface QuickActionsProps {
   activeFilter: FilterType;
@@ -10,10 +10,10 @@ interface QuickActionsProps {
 
 export const QuickActions = ({ activeFilter, onFilterChange }: QuickActionsProps) => {
   const actions = [
-    { icon: Rocket, label: "Proyectos", gradient: "from-blue-500 to-blue-600", filter: "proyecto" as FilterType },
-    { icon: Users, label: "Equipos", gradient: "from-green-500 to-green-600", filter: "equipo" as FilterType },
-    { icon: Lightbulb, label: "Ideas", gradient: "from-yellow-500 to-yellow-600", filter: "idea" as FilterType },
-    { icon: Calendar, label: "Eventos", gradient: "from-purple-500 to-purple-600", filter: "evento" as FilterType },
+    { icon: Rocket, label: "Proyectos", gradient: "from-blue-500 to-blue-600", filter: "projects" as FilterType },
+    { icon: Users, label: "Equipos", gradient: "from-green-500 to-green-600", filter: "teams" as FilterType },
+    { icon: Lightbulb, label: "Ideas", gradient: "from-yellow-500 to-yellow-600", filter: "ideas" as FilterType },
+    { icon: Calendar, label: "Eventos", gradient: "from-purple-500 to-purple-600", filter: "events" as FilterType },
   ];
 
   return (

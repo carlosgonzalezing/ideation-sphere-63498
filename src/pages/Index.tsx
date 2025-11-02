@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -7,12 +7,24 @@ import { CreatePostPrompt } from "@/components/CreatePostPrompt";
 import { SuggestedUsers } from "@/components/SuggestedUsers";
 import { SuggestedGroups } from "@/components/SuggestedGroups";
 import { Card } from "@/components/ui/card";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, Loader2 } from "lucide-react";
+import { usePosts } from "@/hooks/usePosts";
+import { useInView } from "react-intersection-observer";
 
-type FilterType = "all" | "proyecto" | "equipo" | "idea" | "evento" | "text";
+type FilterType = "all" | "ideas" | "projects" | "events" | "teams";
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = usePosts(activeFilter);
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const posts = data?.pages.flatMap((page) => page.posts) || [];
   const projects = [
     {
       author: {
@@ -143,9 +155,7 @@ const Index = () => {
     "Web3 y blockchain",
   ];
 
-  const filteredProjects = activeFilter === "all" 
-    ? projects 
-    : projects.filter(project => project.type === activeFilter);
+  const filteredProjects = projects;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -194,7 +204,41 @@ const Index = () => {
         </div>
 
         <div className="space-y-0 mt-4">
-          {filteredProjects.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : posts.length > 0 ? (
+            <>
+              {posts.map((post: any) => (
+                <ProjectCard
+                  key={post.id}
+                  postId={post.id}
+                  author={{
+                    name: post.profiles?.username || 'Usuario',
+                    role: post.profiles?.career || 'Estudiante',
+                    avatar: post.profiles?.avatar_url || '',
+                  }}
+                  title={post.idea?.title || ''}
+                  description={post.content || post.idea?.description || ''}
+                  category={post.idea?.category || 'General'}
+                  type={post.post_type}
+                  likes={post.reactions_count || 0}
+                  comments={post.comments_count || 0}
+                  timeAgo={new Date(post.created_at).toLocaleDateString()}
+                  image={post.media_url || undefined}
+                  videoUrl={post.media_type === 'video' ? post.media_url : undefined}
+                  userHasReacted={post.user_has_reacted}
+                  userId={post.user_id}
+                />
+              ))}
+              {hasNextPage && (
+                <div ref={ref} className="flex justify-center py-8">
+                  {isFetchingNextPage && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
+                </div>
+              )}
+            </>
+          ) : filteredProjects.length > 0 ? (
             filteredProjects.map((project, index) => (
               <ProjectCard key={index} {...project} />
             ))

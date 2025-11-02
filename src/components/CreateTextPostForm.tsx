@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { ImagePlus, Video, X } from "lucide-react";
+import { ImagePlus, Video, X, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { uploadPostMedia } from "@/lib/storage";
+import { useCreatePost } from "@/hooks/usePosts";
 
 interface CreateTextPostFormProps {
   onClose: () => void;
@@ -13,10 +16,15 @@ const CreateTextPostForm = ({ onClose }: CreateTextPostFormProps) => {
   const [content, setContent] = useState("");
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video" | null>(null);
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const { user } = useAuth();
+  const createPost = useCreatePost();
 
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "video") => {
     const file = e.target.files?.[0];
     if (file) {
+      setMediaFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setMediaPreview(reader.result as string);
@@ -26,7 +34,7 @@ const CreateTextPostForm = ({ onClose }: CreateTextPostFormProps) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!content.trim()) {
@@ -34,8 +42,34 @@ const CreateTextPostForm = ({ onClose }: CreateTextPostFormProps) => {
       return;
     }
 
-    toast.success("¡Publicación creada exitosamente!");
-    onClose();
+    if (!user) {
+      toast.error("Debes iniciar sesión");
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      let media_url;
+      if (mediaFile) {
+        media_url = await uploadPostMedia(mediaFile, user.id);
+      }
+
+      await createPost.mutateAsync({
+        content,
+        media_url,
+        media_type: mediaType || undefined,
+        post_type: 'regular',
+        visibility: 'public',
+        user_id: user.id,
+      });
+
+      onClose();
+    } catch (error: any) {
+      toast.error("Error al crear publicación");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -113,11 +147,18 @@ const CreateTextPostForm = ({ onClose }: CreateTextPostFormProps) => {
       </div>
 
       <div className="flex justify-end gap-3 pt-5">
-        <Button type="button" variant="outline" onClick={onClose}>
+        <Button type="button" variant="outline" onClick={onClose} disabled={uploading}>
           Cancelar
         </Button>
-        <Button type="submit" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-          Publicar
+        <Button type="submit" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90" disabled={uploading}>
+          {uploading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Publicando...
+            </>
+          ) : (
+            "Publicar"
+          )}
         </Button>
       </div>
     </form>

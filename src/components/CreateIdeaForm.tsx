@@ -4,17 +4,33 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ImagePlus, Video, X } from "lucide-react";
+import { ImagePlus, Video, X, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { uploadPostMedia } from "@/lib/storage";
+import { useCreatePost } from "@/hooks/usePosts";
 
-export const CreateIdeaForm = () => {
+interface CreateIdeaFormProps {
+  onClose?: () => void;
+}
+
+export const CreateIdeaForm = ({ onClose }: CreateIdeaFormProps) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [skills, setSkills] = useState("");
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video" | null>(null);
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const createPost = useCreatePost();
 
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "video") => {
     const file = e.target.files?.[0];
     if (file) {
+      setMediaFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setMediaPreview(reader.result as string);
@@ -24,19 +40,58 @@ export const CreateIdeaForm = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Idea publicada",
-      description: "Tu idea ha sido compartida con la comunidad",
-    });
+
+    if (!user) {
+      toast({ title: "Error", description: "Debes iniciar sesión" });
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      let media_url;
+      if (mediaFile) {
+        media_url = await uploadPostMedia(mediaFile, user.id);
+      }
+
+      await createPost.mutateAsync({
+        content: description,
+        media_url,
+        media_type: mediaType || undefined,
+        post_type: 'idea',
+        visibility: 'public',
+        user_id: user.id,
+        idea: {
+          title,
+          description,
+          category,
+          skills: skills.split(',').map(s => s.trim()).filter(Boolean),
+        },
+      });
+
+      toast({ title: "Idea publicada", description: "Tu idea ha sido compartida con la comunidad" });
+      if (onClose) onClose();
+    } catch (error) {
+      toast({ title: "Error", description: "No se pudo publicar la idea" });
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className="space-y-4">
         <Label htmlFor="title" className="text-base font-semibold text-foreground">Título de la idea</Label>
-        <Input id="title" placeholder="Ej: App de Mentoría Estudiantil" className="h-11" required />
+        <Input 
+          id="title" 
+          placeholder="Ej: App de Mentoría Estudiantil" 
+          className="h-11" 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required 
+        />
       </div>
 
       <div className="space-y-4">
@@ -45,13 +100,15 @@ export const CreateIdeaForm = () => {
           id="description"
           placeholder="Describe tu idea, qué problema resuelve y qué tipo de colaboradores buscas..."
           className="min-h-[140px]"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
         />
       </div>
 
       <div className="space-y-4">
         <Label htmlFor="category" className="text-base font-semibold text-foreground">Categoría</Label>
-        <Select required>
+        <Select value={category} onValueChange={setCategory} required>
           <SelectTrigger id="category">
             <SelectValue placeholder="Selecciona una categoría" />
           </SelectTrigger>
@@ -67,7 +124,13 @@ export const CreateIdeaForm = () => {
 
       <div className="space-y-4">
         <Label htmlFor="skills" className="text-base font-semibold text-foreground">Habilidades que buscas</Label>
-        <Input id="skills" placeholder="Ej: Desarrollo, Diseño UI/UX, Marketing" className="h-11" />
+        <Input 
+          id="skills" 
+          placeholder="Ej: Desarrollo, Diseño UI/UX, Marketing" 
+          className="h-11"
+          value={skills}
+          onChange={(e) => setSkills(e.target.value)}
+        />
       </div>
 
       <div className="space-y-4 py-2">
@@ -129,8 +192,15 @@ export const CreateIdeaForm = () => {
         )}
       </div>
 
-      <Button type="submit" className="w-full h-11 mt-8 font-semibold bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-        Publicar idea
+      <Button type="submit" className="w-full h-11 mt-8 font-semibold bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90" disabled={uploading}>
+        {uploading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Publicando...
+          </>
+        ) : (
+          "Publicar idea"
+        )}
       </Button>
     </form>
   );

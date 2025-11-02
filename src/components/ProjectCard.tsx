@@ -11,6 +11,8 @@ import { ImageLightbox } from "./ImageLightbox";
 import { CommentsSection } from "./CommentsSection";
 
 interface ProjectCardProps {
+  postId?: string;
+  userId?: string;
   author: {
     name: string;
     role: string;
@@ -20,14 +22,16 @@ interface ProjectCardProps {
   title: string;
   description: string;
   category: string;
-  type: "idea" | "proyecto" | "text" | "evento" | "equipo";
+  type: "idea" | "proyecto" | "text" | "evento" | "equipo" | "project" | "team" | "academic_event" | "regular";
   likes: number;
   comments: number;
   timeAgo: string;
   teamMembers?: number;
   participants?: string[];
   image?: string;
+  videoUrl?: string;
   groupName?: string;
+  userHasReacted?: boolean;
 }
 
 export const ProjectCard = ({

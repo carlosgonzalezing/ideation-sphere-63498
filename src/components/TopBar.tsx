@@ -3,6 +3,7 @@ import { MessageSquare, Menu, Settings, User, Bell, HelpCircle, LogOut, Shield, 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Drawer,
   DrawerClose,
@@ -19,6 +20,7 @@ export const TopBar = () => {
   const [open, setOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const isDark = localStorage.getItem('darkMode') === 'true';
@@ -236,7 +238,7 @@ export const TopBar = () => {
 
                 <Separator className="my-2" />
 
-                <Button variant="ghost" className="w-full justify-start h-auto py-4 px-4 hover:bg-destructive/10 text-destructive hover:text-destructive">
+                <Button variant="ghost" className="w-full justify-start h-auto py-4 px-4 hover:bg-destructive/10 text-destructive hover:text-destructive" onClick={signOut}>
                   <LogOut className="mr-3 h-5 w-5" />
                   <span className="font-semibold text-base">Cerrar Sesión</span>
                 </Button>
