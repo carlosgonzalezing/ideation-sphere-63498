@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Share2, Bookmark, ThumbsUp, Lightbulb, Flame, Users, Copy, MoreHorizontal, Trash2, Edit } from "lucide-react";
+import { Heart, MessageCircle, Share2, Bookmark, ThumbsUp, Lightbulb, Flame, Users, Copy, MoreHorizontal, Trash2, Edit, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,8 @@ interface ProjectCardProps {
   videoUrl?: string;
   groupName?: string;
   userHasReacted?: boolean;
+  isVipUser?: boolean;
+  vipTier?: 'gold' | 'silver' | 'bronze' | null;
 }
 
 export const ProjectCard = ({
@@ -52,6 +54,8 @@ export const ProjectCard = ({
   participants = [],
   image,
   groupName,
+  isVipUser = false,
+  vipTier = null,
 }: ProjectCardProps) => {
   const [hasJoined, setHasJoined] = useState(false);
   const [localParticipants, setLocalParticipants] = useState(participants);
@@ -150,8 +154,20 @@ export const ProjectCard = ({
     { icon: Flame, label: "Genial", color: "text-orange-600" },
   ];
 
+  const getVipBorderStyle = () => {
+    if (!isVipUser || !vipTier) return "";
+    
+    const tierStyles = {
+      gold: "border-2 border-yellow-400 shadow-lg shadow-yellow-400/20 hover:shadow-yellow-400/30",
+      silver: "border-2 border-gray-400 shadow-lg shadow-gray-400/20 hover:shadow-gray-400/30",
+      bronze: "border-2 border-orange-400 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30",
+    };
+    
+    return tierStyles[vipTier];
+  };
+
   return (
-    <div className="bg-card border-b border-border transition-all duration-200 hover:bg-card/50">
+    <div className={`bg-card border-b border-border transition-all duration-200 hover:bg-card/50 ${getVipBorderStyle()}`}>
       <div className="px-4 py-5 max-w-screen-xl mx-auto">
         <div className="flex items-start gap-3 mb-5">
           <Avatar className="h-11 w-11 ring-1 ring-border flex-shrink-0">
@@ -161,9 +177,21 @@ export const ProjectCard = ({
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground text-sm leading-tight mb-1">
-              {author.name}
-            </h3>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-semibold text-foreground text-sm leading-tight">
+                {author.name}
+              </h3>
+              {isVipUser && vipTier && (
+                <Badge className={`text-[10px] px-1.5 py-0 h-4 ${
+                  vipTier === 'gold' ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
+                  vipTier === 'silver' ? 'bg-gradient-to-r from-gray-300 to-gray-500' :
+                  'bg-gradient-to-r from-orange-400 to-orange-600'
+                } text-white border-0`}>
+                  <Crown className="h-2.5 w-2.5 mr-0.5" />
+                  VIP
+                </Badge>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground leading-relaxed">{author.role}</p>
             <p className="text-xs text-muted-foreground mt-0.5">{timeAgo}</p>
           </div>
