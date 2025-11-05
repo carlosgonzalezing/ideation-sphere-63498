@@ -354,8 +354,14 @@ const Index = () => {
             <div className="flex justify-center items-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
-          ) : posts.length > 0 ? (
+          ) : (
             <>
+              {/* Posts VIP de prueba SIEMPRE se muestran primero */}
+              {filteredProjects.map((project, index) => (
+                <ProjectCard key={`mock-${index}`} {...project} />
+              ))}
+              
+              {/* Luego los posts reales de la BD */}
               {posts.map((post: any) => (
                 <ProjectCard
                   key={post.id}
@@ -378,20 +384,19 @@ const Index = () => {
                   userId={post.user_id}
                 />
               ))}
+              
               {hasNextPage && (
                 <div ref={ref} className="flex justify-center py-8">
                   {isFetchingNextPage && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
                 </div>
               )}
+              
+              {filteredProjects.length === 0 && posts.length === 0 && (
+                <Card className="p-12 text-center">
+                  <p className="text-muted-foreground">No hay publicaciones de este tipo</p>
+                </Card>
+              )}
             </>
-          ) : filteredProjects.length > 0 ? (
-            filteredProjects.map((project, index) => (
-              <ProjectCard key={index} {...project} />
-            ))
-          ) : (
-            <Card className="p-12 text-center">
-              <p className="text-muted-foreground">No hay publicaciones de este tipo</p>
-            </Card>
           )}
         </div>
       </main>
