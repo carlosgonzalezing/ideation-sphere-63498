@@ -1,7 +1,8 @@
-import { Trophy, TrendingUp, Star } from "lucide-react";
+import { Trophy, TrendingUp, Star, Zap } from "lucide-react";
 import { LeaderboardCard } from "@/components/LeaderboardCard";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
+import { Card } from "@/components/ui/card";
 
 // Mock data for leaderboard
 const mockLeaderboardData = [
@@ -186,6 +187,22 @@ const Leaderboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Info sobre Multiplicadores VIP */}
+        <Card className="mb-6 p-4 border-yellow-400/30 bg-gradient-to-r from-yellow-50/50 to-orange-50/50 dark:from-yellow-900/10 dark:to-orange-900/10">
+          <div className="flex items-start gap-3">
+            <Zap className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-bold text-sm mb-1">⚡ Multiplicadores VIP Activos</h3>
+              <p className="text-xs text-muted-foreground">
+                Los miembros VIP obtienen puntos más rápido: 
+                <span className="font-semibold text-yellow-600"> Gold x3</span>, 
+                <span className="font-semibold text-gray-600"> Silver x2</span>, 
+                <span className="font-semibold text-orange-600"> Bronze x1.5</span>
+              </p>
+            </div>
+          </div>
+        </Card>
 
         {/* Leaderboard List */}
         <div className="space-y-3">

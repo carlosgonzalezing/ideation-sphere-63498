@@ -15,6 +15,8 @@ import Auth from "./pages/Auth";
 import Groups from "./pages/Groups";
 import GroupDetail from "./pages/GroupDetail";
 import Leaderboard from "./pages/Leaderboard";
+import TopInnovators from "./pages/TopInnovators";
+import VIPDirectory from "./pages/VIPDirectory";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,8 @@ const App = () => (
             <Route path="/groups" element={<ProtectedRoute><Groups /></ProtectedRoute>} />
             <Route path="/groups/:groupId" element={<ProtectedRoute><GroupDetail /></ProtectedRoute>} />
             <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+            <Route path="/top-innovators" element={<ProtectedRoute><TopInnovators /></ProtectedRoute>} />
+            <Route path="/vip-directory" element={<ProtectedRoute><VIPDirectory /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

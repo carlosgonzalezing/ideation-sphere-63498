@@ -77,6 +77,7 @@ const Index = () => {
       image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop",
       isVipUser: true,
       vipTier: "gold" as const,
+      isHighlighted: true,
     },
     {
       author: {
@@ -96,6 +97,7 @@ const Index = () => {
       image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop",
       isVipUser: true,
       vipTier: "silver" as const,
+      isHighlighted: true,
     },
     {
       author: {

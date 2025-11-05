@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Heart, MoreHorizontal, Send } from "lucide-react";
+import { Heart, MoreHorizontal, Send, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import {
   DropdownMenu,
@@ -16,6 +17,8 @@ interface Comment {
   author: {
     name: string;
     avatar: string;
+    isVipUser?: boolean;
+    vipTier?: 'gold' | 'silver' | 'bronze' | null;
   };
   content: string;
   likes: number;
@@ -178,7 +181,19 @@ export const CommentsSection = ({ postId, initialComments = [] }: CommentsSectio
               </Avatar>
               <div className="flex-1 space-y-1">
                 <div className="bg-muted/50 rounded-2xl px-4 py-2.5">
-                  <div className="font-semibold text-sm mb-1">{comment.author.name}</div>
+                  <div className="font-semibold text-sm mb-1 flex items-center gap-2">
+                    {comment.author.name}
+                    {comment.author.isVipUser && comment.author.vipTier && (
+                      <Badge className={`text-[10px] px-1.5 py-0 h-4 ${
+                        comment.author.vipTier === 'gold' ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
+                        comment.author.vipTier === 'silver' ? 'bg-gradient-to-r from-gray-300 to-gray-500' :
+                        'bg-gradient-to-r from-orange-400 to-orange-600'
+                      } text-white border-0`}>
+                        <Crown className="h-2.5 w-2.5 mr-0.5" />
+                        VIP
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-foreground">{comment.content}</p>
                 </div>
                 <div className="flex items-center gap-4 px-2">

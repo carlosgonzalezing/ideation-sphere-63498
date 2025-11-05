@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Search as SearchIcon, TrendingUp, Users, Lightbulb, Briefcase } from "lucide-react";
+import { Search as SearchIcon, TrendingUp, Users, Lightbulb, Briefcase, Crown } from "lucide-react";
 import { ProjectCard } from "@/components/ProjectCard";
 
 const Search = () => {
@@ -25,20 +25,42 @@ const Search = () => {
       role: "Profesor de IA • MIT",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Luis",
       followers: "15.2K",
+      isVipUser: true,
+      vipTier: "gold" as const,
     },
     {
       name: "Ana Rodríguez",
       role: "Emprendedora Tech • YC Alumni",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=AnaR",
       followers: "8.9K",
+      isVipUser: true,
+      vipTier: "silver" as const,
     },
     {
       name: "Carlos Mendoza",
       role: "Investigador Blockchain • Stanford",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=CarlosM",
       followers: "12.4K",
+      isVipUser: false,
+      vipTier: null,
     },
   ];
+
+  // Ordenar usuarios: VIP primero, luego por seguidores
+  const sortedUsers = [...suggestedUsers].sort((a, b) => {
+    // VIP siempre primero
+    if (a.isVipUser && !b.isVipUser) return -1;
+    if (!a.isVipUser && b.isVipUser) return 1;
+    
+    // Entre VIPs, ordenar por tier
+    if (a.isVipUser && b.isVipUser && a.vipTier && b.vipTier) {
+      const tierOrder = { gold: 3, silver: 2, bronze: 1 };
+      return tierOrder[b.vipTier] - tierOrder[a.vipTier];
+    }
+    
+    // No VIP, ordenar por seguidores
+    return parseFloat(b.followers.replace('K', '')) - parseFloat(a.followers.replace('K', ''));
+  });
 
   const recentProjects = [
     {
@@ -136,7 +158,7 @@ const Search = () => {
 
           {/* People Tab */}
           <TabsContent value="people" className="space-y-3">
-            {suggestedUsers.map((user, index) => (
+            {sortedUsers.map((user, index) => (
               <Card
                 key={index}
                 className="p-4 hover:shadow-[var(--shadow-hover)] transition-all cursor-pointer border-border group"
@@ -150,13 +172,31 @@ const Search = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {user.name}
-                    </h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {user.name}
+                      </h3>
+                      {user.isVipUser && user.vipTier && (
+                        <Badge className={`text-[10px] px-1.5 py-0 h-4 ${
+                          user.vipTier === 'gold' ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
+                          user.vipTier === 'silver' ? 'bg-gradient-to-r from-gray-300 to-gray-500' :
+                          'bg-gradient-to-r from-orange-400 to-orange-600'
+                        } text-white border-0`}>
+                          <Crown className="h-2.5 w-2.5" />
+                        </Badge>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground">{user.role}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {user.followers} seguidores
-                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-xs text-muted-foreground">
+                        {user.followers} seguidores
+                      </p>
+                      {user.isVipUser && (
+                        <Badge variant="outline" className="text-[10px] border-yellow-400 text-yellow-600">
+                          ⭐ Destacado
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                   <Badge className="bg-gradient-to-r from-primary to-accent text-white border-0">
                     Seguir

@@ -88,10 +88,21 @@ export const LeaderboardCard = ({ rank, user, followers }: LeaderboardCardProps)
           </div>
           
           <div className="flex items-center gap-4 mb-2">
-            <Badge variant="secondary" className="gap-1">
-              <Zap className="h-3 w-3" />
-              {user.points.toLocaleString()} pts
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="gap-1">
+                <Zap className="h-3 w-3" />
+                {user.points.toLocaleString()} pts
+              </Badge>
+              {user.is_premium && user.premium_tier && (
+                <Badge className={`text-[10px] px-1.5 py-0 h-5 ${
+                  user.premium_tier === 'gold' ? 'bg-yellow-500/20 text-yellow-600 border border-yellow-400' :
+                  user.premium_tier === 'silver' ? 'bg-gray-400/20 text-gray-600 border border-gray-400' :
+                  'bg-orange-500/20 text-orange-600 border border-orange-400'
+                }`}>
+                  {user.premium_tier === 'gold' ? 'x3' : user.premium_tier === 'silver' ? 'x2' : 'x1.5'}
+                </Badge>
+              )}
+            </div>
             <Badge variant="outline" className="gap-1">
               <Users className="h-3 w-3" />
               {followers}

@@ -37,6 +37,7 @@ interface ProjectCardProps {
   userHasReacted?: boolean;
   isVipUser?: boolean;
   vipTier?: 'gold' | 'silver' | 'bronze' | null;
+  isHighlighted?: boolean;
 }
 
 export const ProjectCard = ({
@@ -56,6 +57,7 @@ export const ProjectCard = ({
   groupName,
   isVipUser = false,
   vipTier = null,
+  isHighlighted = false,
 }: ProjectCardProps) => {
   const [hasJoined, setHasJoined] = useState(false);
   const [localParticipants, setLocalParticipants] = useState(participants);
@@ -166,9 +168,19 @@ export const ProjectCard = ({
     return tierStyles[vipTier];
   };
 
+  const getHighlightedStyle = () => {
+    if (!isHighlighted) return "";
+    return "ring-2 ring-yellow-400 ring-offset-2 animate-pulse";
+  };
+
   return (
-    <div className={`bg-card border-b border-border transition-all duration-200 hover:bg-card/50 ${getVipBorderStyle()}`}>
+    <div className={`bg-card border-b border-border transition-all duration-200 hover:bg-card/50 relative ${getVipBorderStyle()} ${getHighlightedStyle()}`}>
       <div className="px-4 py-5 max-w-screen-xl mx-auto">
+        {isHighlighted && (
+          <div className="absolute top-2 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg flex items-center gap-1 z-10">
+            📌 Destacado
+          </div>
+        )}
         <div className="flex items-start gap-3 mb-5">
           <Avatar className="h-11 w-11 ring-1 ring-border flex-shrink-0">
             <AvatarImage src={author.avatar} alt={author.name} />
