@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Share2, Bookmark, ThumbsUp, Lightbulb, Flame, Users, Copy } from "lucide-react";
+import { Heart, MessageCircle, Share2, Bookmark, ThumbsUp, Lightbulb, Flame, Users, Copy, MoreHorizontal, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useDeletePost } from "@/hooks/usePosts";
 import ReactionsDialog from "./ReactionsDialog";
 import { ImageLightbox } from "./ImageLightbox";
 import { CommentsSection } from "./CommentsSection";
@@ -35,6 +38,8 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({
+  postId,
+  userId,
   author,
   title,
   description,
@@ -57,6 +62,8 @@ export const ProjectCard = ({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const deletePost = useDeletePost();
 
   // Mock reactions data
   const mockReactions = [
@@ -160,26 +167,50 @@ export const ProjectCard = ({
             <p className="text-xs text-muted-foreground leading-relaxed">{author.role}</p>
             <p className="text-xs text-muted-foreground mt-0.5">{timeAgo}</p>
           </div>
-          <div className="flex flex-col gap-2 items-end flex-shrink-0">
-            <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5 whitespace-nowrap rounded">
-              {category}
-            </Badge>
-            {type !== "text" && (
-              <Badge
-                variant={type === "idea" ? "default" : "outline"}
-                className={`text-xs font-medium px-2.5 py-0.5 whitespace-nowrap rounded ${
-                  type === "idea"
-                    ? "bg-primary text-white border-0"
-                    : type === "evento"
-                    ? "bg-purple-600 text-white border-0"
-                    : "border-accent text-accent"
-                }`}
-              >
-                {type === "idea" && "💡 Idea"}
-                {type === "proyecto" && "🚀 En progreso"}
-                {type === "evento" && "📅 Evento"}
-                {type === "equipo" && "👥 Equipo"}
+          <div className="flex items-start gap-2 flex-shrink-0">
+            <div className="flex flex-col gap-2">
+              <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5 whitespace-nowrap rounded">
+                {category}
               </Badge>
+              {type !== "text" && (
+                <Badge
+                  variant={type === "idea" ? "default" : "outline"}
+                  className={`text-xs font-medium px-2.5 py-0.5 whitespace-nowrap rounded ${
+                    type === "idea"
+                      ? "bg-primary text-white border-0"
+                      : type === "evento"
+                      ? "bg-purple-600 text-white border-0"
+                      : "border-accent text-accent"
+                  }`}
+                >
+                  {type === "idea" && "💡 Idea"}
+                  {type === "proyecto" && "🚀 En progreso"}
+                  {type === "evento" && "📅 Evento"}
+                  {type === "equipo" && "👥 Equipo"}
+                </Badge>
+              )}
+            </div>
+            {user?.id === userId && postId && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-card">
+                  <DropdownMenuItem 
+                    onClick={() => {
+                      if (confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {
+                        deletePost.mutate(postId);
+                      }
+                    }}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Eliminar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
         </div>
