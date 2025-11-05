@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MessageSquare, Menu, Settings, User, Bell, HelpCircle, LogOut, Shield, Palette, Globe, Users, Bookmark, Info, AlertCircle, Mail, Home, Moon, Sun } from "lucide-react";
+import { MessageSquare, Menu, Settings, User, Bell, HelpCircle, LogOut, Shield, Palette, Globe, Users, Bookmark, Info, AlertCircle, Mail, Home, Moon, Sun, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link, useLocation } from "react-router-dom";
@@ -124,13 +124,35 @@ export const TopBar = () => {
                   </Button>
                 </Link>
 
-                <Button variant="ghost" className="w-full justify-start h-auto py-4 px-4 hover:bg-primary/10">
-                  <Users className="mr-3 h-5 w-5 text-primary" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-semibold text-base">Mis Conexiones</span>
-                    <span className="text-xs text-muted-foreground">1.2K seguidores · 324 seguidos</span>
-                  </div>
-                </Button>
+                <Link to="/groups" onClick={() => setOpen(false)}>
+                  <Button 
+                    variant="ghost" 
+                    className={`w-full justify-start h-auto py-4 px-4 hover:bg-primary/10 ${
+                      location.pathname.includes("/groups") ? "bg-primary/20 text-primary" : ""
+                    }`}
+                  >
+                    <Users className="mr-3 h-5 w-5 text-primary" />
+                    <div className="flex flex-col items-start">
+                      <span className="font-semibold text-base">Mis Grupos</span>
+                      <span className="text-xs text-muted-foreground">Comunidades y colaboración</span>
+                    </div>
+                  </Button>
+                </Link>
+
+                <Link to="/leaderboard" onClick={() => setOpen(false)}>
+                  <Button 
+                    variant="ghost" 
+                    className={`w-full justify-start h-auto py-4 px-4 hover:bg-primary/10 ${
+                      location.pathname === "/leaderboard" ? "bg-primary/20 text-primary" : ""
+                    }`}
+                  >
+                    <Trophy className="mr-3 h-5 w-5 text-primary" />
+                    <div className="flex flex-col items-start">
+                      <span className="font-semibold text-base">🏆 Tabla Coquitos</span>
+                      <span className="text-xs text-muted-foreground">Usuarios más influyentes</span>
+                    </div>
+                  </Button>
+                </Link>
 
                 <Link to="/messages" onClick={() => setOpen(false)}>
                   <Button 
