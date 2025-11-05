@@ -26,6 +26,50 @@ const Index = () => {
 
   const posts = data?.pages.flatMap((page) => page.posts) || [];
   const projects = [
+    // VIP GOLD - Post Destacado - IDEA
+    {
+      author: {
+        name: "Alejandra Morales ⭐",
+        role: "Ing. en Computación • MIT • Usuario VIP Gold",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=AlejandraVIP",
+      },
+      title: "🚀 Plataforma de IA para Optimizar Horarios Universitarios",
+      description:
+        "¿Cansado de horarios que se empalman? Estoy desarrollando una IA que crea el horario perfecto considerando tus preferencias, tiempo de traslado y carga académica. Ya tengo 3 universidades interesadas. Busco: 1 desarrollador Python, 1 especialista en ML, 1 diseñador UI/UX. Como VIP Gold tengo acceso prioritario a inversionistas. ¿Te unes? 💎",
+      category: "Tecnología",
+      type: "idea" as const,
+      likes: 284,
+      comments: 67,
+      timeAgo: "Hace 45 min",
+      participants: ["Alejandra Morales", "Diego Fernández", "Valentina Castro", "Miguel Herrera", "Sofia Mendez", "Luis Torres", "Carla Reyes"],
+      image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&auto=format&fit=crop",
+      isVipUser: true,
+      vipTier: "gold" as const,
+      isHighlighted: true,
+    },
+    
+    // VIP SILVER - Post Destacado - TEXTO
+    {
+      author: {
+        name: "Daniel Ruiz ⭐",
+        role: "Economía • Stanford • Usuario VIP Silver",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=DanielVIP",
+      },
+      title: "Conseguí mi primera inversión de $50K USD 💰",
+      description:
+        "Hace 3 meses era solo un estudiante con una idea. Hoy cerré mi primera ronda con un VC de Silicon Valley. El cambio clave fue hacerme VIP: acceso a eventos exclusivos, perfil destacado que vieron inversores y mentoría 1-a-1 con fundadores exitosos. A todos los que dudan si vale la pena: TOTALMENTE SÍ. La membresía se pagó sola en 2 semanas. Si están construyendo algo serio, háganlo. No es gasto, es inversión en ustedes. 🚀✨",
+      category: "Emprendimiento",
+      type: "text" as const,
+      likes: 531,
+      comments: 142,
+      timeAgo: "Hace 1 hora",
+      image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&auto=format&fit=crop",
+      isVipUser: true,
+      vipTier: "silver" as const,
+      isHighlighted: true,
+    },
+
+    // Usuario Normal
     {
       author: {
         name: "Emprendedores Tech UNAM",
@@ -40,10 +84,34 @@ const Index = () => {
       type: "evento" as const,
       likes: 156,
       comments: 34,
-      timeAgo: "Hace 1 hora",
+      timeAgo: "Hace 2 horas",
       groupName: "Emprendedores Tech UNAM",
       image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop",
     },
+
+    // VIP GOLD - PROYECTO
+    {
+      author: {
+        name: "Valentina Torres ⭐",
+        role: "Bioinformática • Harvard • Usuario VIP Gold",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=ValentinaVIP",
+      },
+      title: "Startup de Diagnóstico Médico con IA",
+      description:
+        "Desarrollamos un sistema de IA que detecta enfermedades raras a partir de imágenes médicas. Ya tenemos 2 hospitales piloto y estamos en conversaciones con 5 más. Buscamos CTO con experiencia en Computer Vision y Deep Learning. Financiamiento asegurado. Este es el momento de unirte a algo que salvará vidas. 🏥🤖",
+      category: "Salud",
+      type: "proyecto" as const,
+      likes: 412,
+      comments: 89,
+      timeAgo: "Hace 2 horas",
+      teamMembers: 6,
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop",
+      isVipUser: true,
+      vipTier: "gold" as const,
+      isHighlighted: true,
+    },
+
+    // Usuario Normal
     {
       author: {
         name: "Juan Pérez",
@@ -57,48 +125,72 @@ const Index = () => {
       type: "text" as const,
       likes: 28,
       comments: 7,
-      timeAgo: "Hace 30 min",
+      timeAgo: "Hace 3 horas",
     },
+
+    // VIP SILVER - IDEA
     {
       author: {
-        name: "María González",
-        role: "Ingeniería en Sistemas • UNAM",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria",
+        name: "Ricardo Mendoza ⭐",
+        role: "Ing. de Software • Berkeley • Usuario VIP Silver",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=RicardoVIP",
       },
-      title: "App de Mentoría Estudiantil",
+      title: "App de Trading de NFTs Educativos",
       description:
-        "Busco desarrolladores y diseñadores para crear una app que conecte estudiantes senior con juniors. ¿Te unes al equipo?",
-      category: "Tecnología",
+        "Imagina un marketplace donde estudiantes crean y venden NFTs de sus mejores apuntes, proyectos y recursos. Los compradores obtienen acceso exclusivo a material de calidad verificado. Gamificación + blockchain + educación. Ya tengo el whitepaper y el smart contract. Busco: frontend dev (React), designer UI/UX. Los early adopters serán co-founders. 🎓⛓️",
+      category: "Web3",
       type: "idea" as const,
-      likes: 45,
-      comments: 12,
-      timeAgo: "Hace 2 horas",
-      participants: ["María González", "Carlos Ruiz", "Ana Martínez", "Pedro López", "Laura Torres"],
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop",
+      likes: 198,
+      comments: 54,
+      timeAgo: "Hace 3 horas",
+      participants: ["Ricardo Mendoza", "Laura Kim", "Andrés Vargas", "Paula Santos"],
+      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&auto=format&fit=crop",
+      isVipUser: true,
+      vipTier: "silver" as const,
+    },
+
+    // VIP GOLD - TEXTO
+    {
+      author: {
+        name: "María González ⭐",
+        role: "Ingeniería en Sistemas • MIT • Usuario VIP Gold",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=MariaVIP",
+      },
+      title: "Cómo pasé de 0 a 10K seguidores en LinkedIn en 3 meses",
+      description:
+        "Les comparto mi estrategia exacta: 1) Publicar valor diario (no selfies), 2) Comentar en posts de líderes de tu industria, 3) Crear contenido original con datos, 4) Ser consistente. Resultado: 10K seguidores, 5 ofertas de trabajo, 2 oportunidades de speaking. El networking digital es el nuevo currículum. Si quieren crecer en LinkedIn, DM y les paso mi guía completa gratis. 📈🔥",
+      category: "Marketing Personal",
+      type: "text" as const,
+      likes: 723,
+      comments: 201,
+      timeAgo: "Hace 4 horas",
       isVipUser: true,
       vipTier: "gold" as const,
       isHighlighted: true,
     },
+
+    // VIP BRONZE - PROYECTO
     {
       author: {
-        name: "Carlos Ruiz",
-        role: "Administración de Empresas • Tec",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos",
+        name: "Carlos Ruiz ⭐",
+        role: "Administración de Empresas • Tec • Usuario VIP Bronze",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=CarlosVIP",
       },
       title: "Startup de Sostenibilidad Urbana",
       description:
-        "Proyecto en desarrollo para reducir residuos plásticos en universidades. Ya tenemos MVP funcionando y estamos escalando.",
+        "Proyecto en desarrollo para reducir residuos plásticos en universidades. Ya tenemos MVP funcionando y estamos escalando. Piloto en 3 campus, próximo objetivo: 10 más. Busco growth hacker y especialista en fundraising.",
       category: "Emprendimiento",
       type: "proyecto" as const,
-      likes: 67,
-      comments: 23,
+      likes: 167,
+      comments: 43,
       timeAgo: "Hace 5 horas",
       teamMembers: 8,
       image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop",
       isVipUser: true,
-      vipTier: "silver" as const,
-      isHighlighted: true,
+      vipTier: "bronze" as const,
     },
+
+    // Usuario Normal
     {
       author: {
         name: "Sostenibilidad Campus",
@@ -113,11 +205,55 @@ const Index = () => {
       type: "proyecto" as const,
       likes: 92,
       comments: 28,
-      timeAgo: "Hace 4 horas",
+      timeAgo: "Hace 6 horas",
       teamMembers: 15,
       groupName: "Sostenibilidad Campus",
       image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop",
     },
+
+    // VIP SILVER - IDEA
+    {
+      author: {
+        name: "Sofia Ramírez ⭐",
+        role: "Diseño UX • Stanford • Usuario VIP Silver",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=SofiaVIP",
+      },
+      title: "Plataforma de Mentoría Estudiantil 1-on-1",
+      description:
+        "App que conecte estudiantes senior con juniors mediante matching por intereses, carrera y objetivos. Sistema de reputación, sesiones por video, y marketplace de servicios. Busco: React dev, backend (Node.js), y marketing growth. Ya tengo investor interesado para seed round. 🎯",
+      category: "Tecnología",
+      type: "idea" as const,
+      likes: 245,
+      comments: 78,
+      timeAgo: "Hace 7 horas",
+      participants: ["Sofia Ramírez", "Carlos Ruiz", "Ana Martínez", "Pedro López", "Laura Torres", "Diego Reyes"],
+      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop",
+      isVipUser: true,
+      vipTier: "silver" as const,
+      isHighlighted: true,
+    },
+
+    // VIP GOLD - TEXTO MOTIVACIONAL
+    {
+      author: {
+        name: "Roberto Sánchez ⭐",
+        role: "Ingeniería Mecatrónica • MIT • Usuario VIP Gold",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=RobertoVIP",
+      },
+      title: "Dejé mi trabajo de $120K para construir mi startup 🚀",
+      description:
+        "Hace 6 meses renuncié a Google. Todos dijeron que estaba loco. Hoy mi startup tiene 50K usuarios activos y revenue de $30K MRR. ¿Lo mejor? Trabajo en lo que amo, con mi propio horario, construyendo MI visión. No todo es color de rosa: hubo noches sin dormir, rechazos, y casi me quedo sin ahorros. Pero cada día valió la pena. Si tienes una idea que no te deja dormir, este es tu sign para empezar. La vida es una sola. 🔥💪",
+      category: "Motivación",
+      type: "text" as const,
+      likes: 892,
+      comments: 267,
+      timeAgo: "Hace 8 horas",
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop",
+      isVipUser: true,
+      vipTier: "gold" as const,
+    },
+
+    // Usuario Normal
     {
       author: {
         name: "Ana Martínez",
@@ -135,20 +271,22 @@ const Index = () => {
       participants: ["Ana Martínez", "Pedro López", "Sofía Ramírez"],
       image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800&auto=format&fit=crop",
     },
+
+    // VIP BRONZE - PROYECTO
     {
       author: {
-        name: "Roberto Sánchez",
-        role: "Ingeniería Mecatrónica • IPN",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roberto",
+        name: "Diego Fernández ⭐",
+        role: "Ciencias de la Computación • UNAM • Usuario VIP Bronze",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=DiegoVIP",
       },
-      title: "Robot Asistente para Laboratorios",
+      title: "Robot Asistente para Laboratorios Universitarios",
       description:
-        "Proyecto en fase de prototipado. Robot móvil que ayuda en laboratorios universitarios. Presentando en competencia nacional próximamente.",
-      category: "Tecnología",
+        "Proyecto en fase de prototipado. Robot móvil autónomo que ayuda en laboratorios: organiza materiales, asiste en experimentos y lleva registro automatizado. Presentando en competencia nacional el próximo mes. Busco sponsor y mentor en robótica avanzada. 🤖⚙️",
+      category: "Robótica",
       type: "proyecto" as const,
-      likes: 89,
-      comments: 31,
-      timeAgo: "Hace 3 horas",
+      likes: 189,
+      comments: 51,
+      timeAgo: "Hace 1 día",
       teamMembers: 5,
       image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop",
       isVipUser: true,
